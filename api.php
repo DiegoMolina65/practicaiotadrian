@@ -38,7 +38,7 @@ switch ($method) {
         } else {
             echo json_encode(array("message" => "No se pudo crear el jugador."));
         }
-        break;        
+        break;
 
     case 'PUT':
         $id = isset($_GET['id']) ? $_GET['id'] : null;
