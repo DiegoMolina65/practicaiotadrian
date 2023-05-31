@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
+<meta charset="UTF-8">
 <head>
-    <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
     <title>Mostrar Datos</title>
 </head>
@@ -37,21 +37,21 @@
                         nombre.textContent = jugador.nombre;
                         jugadorDiv.appendChild(nombre);
 
-                        const edad = document.createElement('p');
-                        edad.textContent = 'Edad: ' + jugador.edad;
-                        jugadorDiv.appendChild(edad);
+                        const nacionalidad = document.createElement('p');
+                        nacionalidad.textContent = 'Nacionalidad: ' + jugador.nacionalidad;
+                        jugadorDiv.appendChild(nacionalidad);
 
                         const posicion = document.createElement('p');
                         posicion.textContent = 'Posición: ' + jugador.posicion;
                         jugadorDiv.appendChild(posicion);
 
+                        const edad = document.createElement('p');
+                        edad.textContent = 'Edad: ' + jugador.edad;
+                        jugadorDiv.appendChild(edad);
+
                         const equipo = document.createElement('p');
                         equipo.textContent = 'Equipo: ' + jugador.equipo;
                         jugadorDiv.appendChild(equipo);
-
-                        const nacionalidad = document.createElement('p');
-                        nacionalidad.textContent = 'Nacionalidad: ' + jugador.nacionalidad;
-                        jugadorDiv.appendChild(nacionalidad);
 
                         container.appendChild(jugadorDiv);
                     });
@@ -63,11 +63,12 @@
 
         // Función para volver a la página principal
         function volver() {
-            window.location.href = 'index.php';
+            window.location.href = 'index.html';
         }
 
         // Cargar y mostrar los jugadores al cargar la página
         cargarJugadores();
+
     </script>
 </body>
 </html>
