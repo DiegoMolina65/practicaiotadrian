@@ -100,97 +100,81 @@
             const edad = document.querySelector('#edad').value;
             const equipo = document.querySelector('#equipo').value;
 
-            // Desactivar el botón de Crear
-            const submitButton = document.querySelector('#create-form button');
-            submitButton.disabled = true;
-
             fetch('api.php', {
-                method: 'POST',
-                body: JSON.stringify({ nombre, nacionalidad, posicion, edad, equipo }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(() => {
-                    createForm.reset();
-                    cargarJugadores();
-
-                    // Reactivar el botón de Crear después de un breve retraso
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                    }, 500);
-                });
-        }
-
-        // Función para eliminar un jugador
-        function eliminarJugador(id) {
-            fetch(`api.php?id=${id}`, {
-                method: 'DELETE'
-            })
-                .then(() => cargarJugadores());
-        }
-
-        // Función para cargar los datos de un jugador en el formulario de edición
-        function editarJugador(id) {
-            fetch(`api.php?id=${id}`)
-                .then(response => response.json())
-                .then(jugador => {
-                    document.querySelector('#nombre').value = jugador.nombre;
-                    document.querySelector('#nacionalidad').value = jugador.nacionalidad;
-                    document.querySelector('#posicion').value = jugador.posicion;
-                    document.querySelector('#edad').value = jugador.edad;
-                    document.querySelector('#equipo').value = jugador.equipo;
-
-                    // Actualizar el botón del formulario para que llame a la función de actualización
-                    const submitButton = document.querySelector('#create-form button');
-                    submitButton.innerText = 'Actualizar';
-                    submitButton.onclick = () => actualizarJugador(id);
-                });
-        }
-
-        // Función para actualizar un jugador
-        function actualizarJugador(id) {
-            const nombre = document.querySelector('#nombre').value;
-            const nacionalidad = document.querySelector('#nacionalidad').value;
-            const posicion = document.querySelector('#posicion').value;
-            const edad = document.querySelector('#edad').value;
-            const equipo = document.querySelector('#equipo').value;
-
-            // Desactivar el botón de Actualizar
-            const submitButton = document.querySelector('#create-form button');
-            submitButton.disabled = true;
-
-            fetch(`api.php?id=${id}`, {
-                method: 'PUT',
-                body: JSON.stringify({ nombre, nacionalidad, posicion, edad, equipo }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(() => {
-                    createForm.reset();
-
-                    // Restaurar el botón del formulario para que llame a la función de creación
-                    submitButton.innerText = 'Crear';
-                    submitButton.onclick = crearJugador;
-
-                    cargarJugadores();
-
-                    // Reactivar el botón de Actualizar después de un breve retraso
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                    }, 500);
-                });
-        }
-
-        // Cargar jugadores al cargar la página
+            method: 'POST',
+            body: JSON.stringify({ nombre, nacionalidad, posicion, edad, equipo }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(() => {
+        createForm.reset();
         cargarJugadores();
-
-        // Agregar evento de envío del formulario
-        createForm.addEventListener('submit', event => {
-            event.preventDefault();
-            crearJugador();
         });
+    }
+
+    // Función para eliminar un jugador
+    function eliminarJugador(id) {
+        fetch(`api.php?id=${id}`, {
+        method: 'DELETE'
+    })
+        .then(() => cargarJugadores());
+    }
+
+    // Función para cargar los datos de un jugador en el formulario de edición
+    function editarJugador(id) {
+    fetch(`api.php?id=${id}`)
+        .then(response => response.json())
+        .then(jugador => {
+            document.querySelector('#nombre').value = jugador.nombre;
+            document.querySelector('#nacionalidad').value = jugador.nacionalidad;
+            document.querySelector('#posicion').value = jugador.posicion;
+            document.querySelector('#edad').value = jugador.edad;
+            document.querySelector('#equipo').value = jugador.equipo;
+
+    // Actualizar el botón del formulario para que llame a la función de actualización
+      const submitButton = document.querySelector('#create-form button');
+      submitButton.innerText = 'Actualizar';
+      submitButton.onclick = () => actualizarJugador(id);
+    });
+}
+
+// Función para actualizar un jugador
+function actualizarJugador(id) {
+  const nombre = document.querySelector('#nombre').value;
+  const nacionalidad = document.querySelector('#nacionalidad').value;
+  const posicion = document.querySelector('#posicion').value;
+  const edad = document.querySelector('#edad').value;
+  const equipo = document.querySelector('#equipo').value;
+
+  fetch(`api.php?id=${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ nombre, nacionalidad, posicion, edad, equipo }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(() => {
+      createForm.reset();
+
+      // Restaurar el botón del formulario para que llame a la función de creación
+      const submitButton = document.querySelector('#create-form button');
+      submitButton.innerText = 'Crear';
+      submitButton.onclick = crearJugador;
+
+      cargarJugadores();
+    });
+}
+
+// Cargar jugadores al cargar la página
+cargarJugadores();
+
+// Agregar evento de envío del formulario
+createForm.addEventListener('submit', event => {
+  event.preventDefault();
+  crearJugador();
+});
+
     </script>
 </body>
 </html>
