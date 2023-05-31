@@ -3,10 +3,10 @@
 <meta charset="UTF-8">
 <head>
     <link rel="stylesheet" href="styles.css">
-    <title>CRUD de Jugadores</title>
+    <title>CRUD Jugadores</title>
 </head>
 <body>
-    <h1>CRUD de Jugadores</h1>
+    <h1>CRUD Jugadores</h1>
 
     <h2>Crear Jugador</h2>
     <form id="create-form">
@@ -26,7 +26,6 @@
         <input type="text" id="equipo" required><br>
 
         <button type="submit">Crear</button>
-        <button onclick="mostrarDatos()">Mostrar Datos</button>
     </form>
 
     <h2>Jugadores</h2>
@@ -49,11 +48,6 @@
         // Obtener referencia a la tabla y el formulario
         const tableBody = document.querySelector('#jugadores-table tbody');
         const createForm = document.querySelector('#create-form');
-
-        // Función para redirigir a la página de mostrar datos
-        function mostrarDatos() {
-            window.location.href = 'mostrar-datos.html';
-        }
 
         // Función para cargar los jugadores desde la API
         function cargarJugadores() {
@@ -100,10 +94,6 @@
             const edad = document.querySelector('#edad').value;
             const equipo = document.querySelector('#equipo').value;
 
-            // Desactivar el botón de Crear
-            const submitButton = document.querySelector('#create-form button');
-            submitButton.disabled = true;
-
             fetch('api.php', {
                 method: 'POST',
                 body: JSON.stringify({ nombre, nacionalidad, posicion, edad, equipo }),
@@ -111,23 +101,15 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    createForm.reset();
-                    cargarJugadores();
-
-                    // Reactivar el botón de Crear después de un breve retraso
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                    }, 500);
-                });
-        }
-
-        // Función para eliminar un jugador
-        function eliminarJugador(id) {
-            fetch(`api.php?id=${id}`, {
-                method: 'DELETE'
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                createForm.reset();
+                cargarJugadores();
             })
-                .then(() => cargarJugadores());
+            .catch(error => {
+                console.error('Error al crear el jugador:', error);
+            });
         }
 
         // Función para cargar los datos de un jugador en el formulario de edición
@@ -156,10 +138,6 @@
             const edad = document.querySelector('#edad').value;
             const equipo = document.querySelector('#equipo').value;
 
-            // Desactivar el botón de Actualizar
-            const submitButton = document.querySelector('#create-form button');
-            submitButton.disabled = true;
-
             fetch(`api.php?id=${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({ nombre, nacionalidad, posicion, edad, equipo }),
@@ -167,20 +145,35 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    createForm.reset();
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                createForm.reset();
+                cargarJugadores();
+                
+                // Restaurar el botón del formulario para que llame a la función de creación
+                const submitButton = document.querySelector('#create-form button');
+                submitButton.innerText = 'Crear';
+                submitButton.onclick = crearJugador;
+            })
+            .catch(error => {
+                console.error('Error al actualizar el jugador:', error);
+            });
+        }
 
-                    // Restaurar el botón del formulario para que llame a la función de creación
-                    submitButton.innerText = 'Crear';
-                    submitButton.onclick = crearJugador;
-
-                    cargarJugadores();
-
-                    // Reactivar el botón de Actualizar después de un breve retraso
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                    }, 500);
-                });
+        // Función para eliminar un jugador
+        function eliminarJugador(id) {
+            fetch(`api.php?id=${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                cargarJugadores();
+            })
+            .catch(error => {
+                console.error('Error al eliminar el jugador:', error);
+            });
         }
 
         // Cargar jugadores al cargar la página
