@@ -26,25 +26,19 @@ switch ($method) {
     case 'POST':
         // Crear un nuevo jugador
         $data = json_decode(file_get_contents("php://input"));
-
-        $nombre = $data->nombre;
-        $edad = $data->edad;
-        $posicion = $data->posicion;
-        $equipo = $data->equipo;
-        $nacionalidad = $data->nacionalidad;
-
-        $jugador->nombre = $nombre;
-        $jugador->edad = $edad;
-        $jugador->posicion = $posicion;
-        $jugador->equipo = $equipo;
-        $jugador->nacionalidad = $nacionalidad;
-
+        
+        $jugador->nombre = $data->nombre;
+        $jugador->edad = $data->edad;
+        $jugador->posicion = $data->posicion;
+        $jugador->equipo = $data->equipo;
+        $jugador->nacionalidad = $data->nacionalidad;
+        
         if ($jugador->create()) {
             echo json_encode(array("message" => "Jugador creado con éxito."));
         } else {
             echo json_encode(array("message" => "No se pudo crear el jugador."));
         }
-        break;
+        break;        
 
     case 'PUT':
         $id = isset($_GET['id']) ? $_GET['id'] : null;
