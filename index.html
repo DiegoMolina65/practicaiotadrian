@@ -14,7 +14,7 @@
         <input type="text" id="nombre" required><br>
 
         <label for="edad">Edad:</label>
-        <input type="number" id="edad" required><br>
+        <input type="text" id="edad" required><br>
 
         <label for="posicion">Posición:</label>
         <input type="text" id="posicion" required><br>
@@ -52,7 +52,7 @@
 
         // Función para redirigir a la página de mostrar datos
         function mostrarDatos() {
-            window.location.href = 'mostrar-datos.html';
+            window.location.href = 'mostrar-datos.php';
         }
 
         // Función para cargar los jugadores desde la API
@@ -111,15 +111,15 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    createForm.reset();
-                    cargarJugadores();
-
-                    // Reactivar el botón de Crear después de un breve retraso
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                    }, 500);
-                });
+            .then(() => {
+                createForm.reset();
+                cargarJugadores();
+                
+                // Reactivar el botón de Crear después de un breve retraso
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                }, 500);
+            });
         }
 
         // Función para eliminar un jugador
@@ -167,20 +167,20 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    createForm.reset();
+            .then(() => {
+                createForm.reset();
 
-                    // Restaurar el botón del formulario para que llame a la función de creación
-                    submitButton.innerText = 'Crear';
-                    submitButton.onclick = crearJugador;
+                // Restaurar el botón del formulario para que llame a la función de creación
+                submitButton.innerText = 'Crear';
+                submitButton.onclick = crearJugador;
 
-                    cargarJugadores();
+                cargarJugadores();
 
-                    // Reactivar el botón de Actualizar después de un breve retraso
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                    }, 500);
-                });
+                // Reactivar el botón de Actualizar después de un breve retraso
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                }, 500);
+            });
         }
 
         // Cargar jugadores al cargar la página

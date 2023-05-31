@@ -1,8 +1,8 @@
 <?php
 header("Content-Type: application/json");
 
-require_once 'database.php';
-require_once 'jugadores.php';
+include_once 'database.php';
+include_once 'jugador.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -26,13 +26,19 @@ switch ($method) {
     case 'POST':
         // Crear un nuevo jugador
         $data = json_decode(file_get_contents("php://input"));
-        
-        $jugador->nombre = $data->nombre;
-        $jugador->edad = $data->edad;
-        $jugador->posicion = $data->posicion;
-        $jugador->equipo = $data->equipo;
-        $jugador->nacionalidad = $data->nacionalidad;
-        
+
+        $nombre = $data->nombre;
+        $edad = $data->edad;
+        $posicion = $data->posicion;
+        $equipo = $data->equipo;
+        $nacionalidad = $data->nacionalidad;
+
+        $jugador->nombre = $nombre;
+        $jugador->edad = $edad;
+        $jugador->posicion = $posicion;
+        $jugador->equipo = $equipo;
+        $jugador->nacionalidad = $nacionalidad;
+
         if ($jugador->create()) {
             echo json_encode(array("message" => "Jugador creado con éxito."));
         } else {

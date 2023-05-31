@@ -1,6 +1,4 @@
 <?php
-require_once 'database.php';
-
 class Jugador {
     private $conn;
     private $table_name = "jugadores";
@@ -101,3 +99,4 @@ class Jugador {
         }
     }
 }
+?>
