@@ -3,10 +3,10 @@
 <meta charset="UTF-8">
 <head>
     <link rel="stylesheet" href="styles.css">
-    <title>CRUD de Jugadores</title>
+    <title>CRUD Jugadores</title>
 </head>
 <body>
-    <h1>CRUD de Jugadores</h1>
+    <h1>CRUD Jugadores</h1>
 
     <h2>Crear Jugador</h2>
     <form id="create-form">
@@ -26,7 +26,7 @@
         <input type="text" id="equipo" required><br>
 
         <button type="submit">Crear</button>
-        <button onclick="mostrarDatos()">Mostrar Datos</button>
+        <button onclick="mostrarJugadores()">Mostrar Jugadores</button>
     </form>
 
     <h2>Jugadores</h2>
@@ -50,9 +50,9 @@
         const tableBody = document.querySelector('#jugadores-table tbody');
         const createForm = document.querySelector('#create-form');
 
-        // Función para redirigir a la página de mostrar datos
-        function mostrarDatos() {
-            window.location.href = 'mostrar-datos.html';
+        // Función para redirigir a la página de mostrar jugadores
+        function mostrarJugadores() {
+            window.location.href = 'mostrar-jugadores.html';
         }
 
         // Función para cargar los jugadores desde la API
