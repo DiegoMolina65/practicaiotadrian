@@ -13,9 +13,10 @@ class Database {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $exception) {
-            echo json_encode(array("message" => "Error de conexión: " . $exception->getMessage()));
+            echo "Error de conexión: " . $exception->getMessage();
         }
 
         return $this->conn;
     }
 }
+?>
