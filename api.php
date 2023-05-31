@@ -1,13 +1,13 @@
 <?php
 header("Content-Type: application/json");
 
-include_once 'database.php';
-include_once 'jugadores.php';
+require_once 'database.php';
+require_once 'jugadores.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$jugador = new Jugador();
+$jugador = new Jugador($db);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -80,3 +80,4 @@ switch ($method) {
         echo json_encode(array("message" => "Método no válido."));
         break;
 }
+?>

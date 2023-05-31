@@ -12,9 +12,8 @@ class Jugador {
     public $equipo;
     public $nacionalidad;
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection();
+    public function __construct($db) {
+        $this->conn = $db;
     }
 
     public function create() {
