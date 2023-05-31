@@ -3,51 +3,38 @@
 <meta charset="UTF-8">
 <head>
     <link rel="stylesheet" href="styles.css">
-    <title>CRUD Recetas de Panaderia</title>
+    <title>CRUD de Jugadores</title>
 </head>
 <body>
-    <h1>CRUD Recetas de Panaderia</h1>
+    <h1>CRUD de Jugadores</h1>
 
-    <h2>Crear Receta</h2>
+    <h2>Crear Jugador</h2>
     <form id="create-form">
-        <input type="hidden" id="receta-id" value="">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" required><br>
 
-        <label for="tipo_pan">Tipo de Pan:</label>
-        <input type="text" id="tipo_pan" required><br>
+        <label for="posicion">Posición:</label>
+        <input type="text" id="posicion" required><br>
 
-        <label for="ingredientes">Ingredientes:</label>
-        <textarea id="ingredientes" required></textarea><br>
+        <label for="equipo">Equipo:</label>
+        <input type="text" id="equipo" required><br>
 
-        <label for="instrucciones">Instrucciones:</label>
-        <textarea id="instrucciones" required></textarea><br>
-
-        <label for="tiempo_preparacion">Tiempo de Preparacion:</label>
-        <input type="text" id="tiempo_preparacion" required><br>
-
-        <label for="dificultad">Dificultad:</label>
-        <select id="dificultad" required>
-            <option value="Fácil">Facil</option>
-            <option value="Media">Media</option>
-            <option value="Difícil">Dificil</option>
-        </select><br>
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" required><br>
 
         <button type="submit">Crear</button>
-        <button type="button" onclick="mostrarDatos()">Mostrar Datos</button>
+        <button onclick="mostrarDatos()">Mostrar Datos</button>
     </form>
 
-    <h2>Recetas</h2>
-    <table id="recetas-table">
+    <h2>Jugadores</h2>
+    <table id="jugadores-table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Tipo de Pan</th>
-                <th>Ingredientes</th>
-                <th>Instrucciones</th>
-                <th>Tiempo de preparacion</th>
-                <th>Dificultad</th>
+                <th>Posición</th>
+                <th>Equipo</th>
+                <th>Edad</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -56,7 +43,7 @@
 
     <script>
         // Obtener referencia a la tabla y el formulario
-        const tableBody = document.querySelector('#recetas-table tbody');
+        const tableBody = document.querySelector('#jugadores-table tbody');
         const createForm = document.querySelector('#create-form');
 
         // Función para redirigir a la página de mostrar datos
@@ -64,33 +51,31 @@
             window.location.href = 'mostrar-datos.html';
         }
 
-        // Función para cargar las recetas desde la API
-        function cargarRecetas() {
+        // Función para cargar los jugadores desde la API
+        function cargarJugadores() {
             fetch('api.php')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Error al obtener las recetas.');
+                        throw new Error('Error al obtener los jugadores.');
                     }
                     return response.json(); // Convertir la respuesta a JSON
                 })
-                .then(recetas => {
+                .then(jugadores => {
                     // Limpiar la tabla
                     tableBody.innerHTML = '';
 
-                    // Recorrer las recetas y agregar filas a la tabla
-                    recetas.forEach(receta => {
+                    // Recorrer los jugadores y agregar filas a la tabla
+                    jugadores.forEach(jugador => {
                         const row = `
                             <tr>
-                                <td>${receta.id}</td>
-                                <td>${receta.nombre}</td>
-                                <td>${receta.tipo_pan}</td>
-                                <td>${receta.ingredientes}</td>
-                                <td>${receta.instrucciones}</td>
-                                <td>${receta.tiempo_preparacion}</td>
-                                <td>${receta.dificultad}</td>
+                                <td>${jugador.id}</td>
+                                <td>${jugador.nombre}</td>
+                                <td>${jugador.posicion}</td>
+                                <td>${jugador.equipo}</td>
+                                <td>${jugador.edad}</td>
                                 <td>
-                                    <button onclick="editarReceta(${receta.id})">Editar</button>
-                                    <button onclick="eliminarReceta(${receta.id})">Eliminar</button>
+                                    <button onclick="editarJugador(${jugador.id})">Editar</button>
+                                    <button onclick="eliminarJugador(${jugador.id})">Eliminar</button>
                                 </td>
                             </tr>
                         `;
@@ -98,93 +83,105 @@
                     });
                 })
                 .catch(error => {
-                    console.error('Error al obtener las recetas:', error);
+                    console.error('Error al obtener los jugadores:', error);
                 });
         }
 
-        // Función para crear una receta
-        function crearReceta() {
+        // Función para crear un jugador
+        function crearJugador() {
             const nombre = document.querySelector('#nombre').value;
-            const tipo_pan = document.querySelector('#tipo_pan').value;
-            const ingredientes = document.querySelector('#ingredientes').value;
-            const instrucciones = document.querySelector('#instrucciones').value;
-            const tiempo_preparacion = document.querySelector('#tiempo_preparacion').value;
-            const dificultad = document.querySelector('#dificultad').value;
-
-            // Obtener el ID de la receta actual
-            const recetaId = document.querySelector('#receta-id').value;
+            const posicion = document.querySelector('#posicion').value;
+            const equipo = document.querySelector('#equipo').value;
+            const edad = document.querySelector('#edad').value;
 
             // Desactivar el botón de Crear
             const submitButton = document.querySelector('#create-form button');
             submitButton.disabled = true;
 
-            // Verificar si se está creando una nueva receta o actualizando una existente
-            const method = recetaId ? 'PUT' : 'POST';
-            const url = recetaId ? `api.php?id=${recetaId}` : 'api.php';
-
-            fetch(url, {
-                method: method,
-                body: JSON.stringify({ nombre, tipo_pan, ingredientes, instrucciones, tiempo_preparacion, dificultad }),
+            fetch('api.php', {
+                method: 'POST',
+                body: JSON.stringify({ nombre, posicion, equipo, edad }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al crear o actualizar la receta.');
-                    }
-                    return response.json(); // Convertir la respuesta a JSON
-                })
                 .then(() => {
                     createForm.reset();
-                    cargarRecetas();
+                    cargarJugadores();
 
                     // Reactivar el botón de Crear después de un breve retraso
                     setTimeout(() => {
                         submitButton.disabled = false;
                     }, 500);
-                })
-                .catch(error => {
-                    console.error('Error al crear o actualizar la receta:', error);
                 });
         }
 
-        // Función para eliminar una receta
-        function eliminarReceta(id) {
+        // Función para eliminar un jugador
+        function eliminarJugador(id) {
             fetch(`api.php?id=${id}`, {
                 method: 'DELETE'
             })
-                .then(() => cargarRecetas())
-                .catch(error => {
-                    console.error('Error al eliminar la receta:', error);
-                });
+                .then(() => cargarJugadores());
         }
 
-        // Función para cargar los datos de una receta en el formulario de edición
-        function editarReceta(id) {
+        // Función para cargar los datos de un jugador en el formulario de edición
+        function editarJugador(id) {
             fetch(`api.php?id=${id}`)
                 .then(response => response.json())
-                .then(receta => {
-                    document.querySelector('#receta-id').value = receta.id;
-                    document.querySelector('#nombre').value = receta.nombre;
-                    document.querySelector('#tipo_pan').value = receta.tipo_pan;
-                    document.querySelector('#ingredientes').value = receta.ingredientes;
-                    document.querySelector('#instrucciones').value = receta.instrucciones;
-                    document.querySelector('#tiempo_preparacion').value = receta.tiempo_preparacion;
-                    document.querySelector('#dificultad').value = receta.dificultad;
-                })
-                .catch(error => {
-                    console.error('Error al obtener los datos de la receta:', error);
+                .then(jugador => {
+                    document.querySelector('#nombre').value = jugador.nombre;
+                    document.querySelector('#posicion').value = jugador.posicion;
+                    document.querySelector('#equipo').value = jugador.equipo;
+                    document.querySelector('#edad').value = jugador.edad;
+
+                    // Actualizar el botón del formulario para que llame a la función de actualización
+                    const submitButton = document.querySelector('#create-form button');
+                    submitButton.innerText = 'Actualizar';
+                    submitButton.onclick = () => actualizarJugador(id);
                 });
         }
 
-        // Cargar recetas al cargar la página
-        cargarRecetas();
+        // Función para actualizar un jugador
+        function actualizarJugador(id) {
+            const nombre = document.querySelector('#nombre').value;
+            const posicion = document.querySelector('#posicion').value;
+            const equipo = document.querySelector('#equipo').value;
+            const edad = document.querySelector('#edad').value;
+
+            // Desactivar el botón de Actualizar
+            const submitButton = document.querySelector('#create-form button');
+            submitButton.disabled = true;
+
+            fetch(`api.php?id=${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ nombre, posicion, equipo, edad }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    createForm.reset();
+
+                    // Restaurar el botón del formulario para que llame a la función de creación
+                    submitButton.innerText = 'Crear';
+                    submitButton.onclick = crearJugador;
+
+                    cargarJugadores();
+
+                    // Reactivar el botón de Actualizar después de un breve retraso
+                    setTimeout(() => {
+                        submitButton.disabled = false;
+                    }, 500);
+                });
+        }
+
+        // Cargar jugadores al cargar la página
+        cargarJugadores();
 
         // Agregar evento de envío del formulario
         createForm.addEventListener('submit', event => {
             event.preventDefault();
-            crearReceta();
+            crearJugador();
         });
     </script>
 </body>
