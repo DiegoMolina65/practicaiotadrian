@@ -1,0 +1,100 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+/* Estilos del formulario */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+button[type="submit"] {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #333;
+}
+
+/* Estilos de la tabla */
+#jugadores-table {
+    margin-bottom: 20px;
+}
+
+#jugadores-table th,
+#jugadores-table td {
+    text-align: center;
+}
+
+#jugadores-table th:first-child,
+#jugadores-table td:first-child {
+    text-align: left;
+}
+
+/* Estilos de los botones de acciones */
+#jugadores-table button {
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#jugadores-table button:hover {
+    background-color: black;
+    color: white;
+}
+
+/* Estilos adicionales para interactividad */
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#create-form button + button {
+    margin-left: 10px;
+}

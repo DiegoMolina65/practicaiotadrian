@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>CRUD Jugadores</title>
+</head>
+<body>
+    <h1>CRUD Jugadores</h1>
+
+    <h2>Crear Jugador</h2>
+    <form id="create-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required><br>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" required><br>
+
+        <label for="posicion">Posición:</label>
+        <input type="text" id="posicion" required><br>
+
+        <label for="equipo">Equipo:</label>
+        <input type="text" id="equipo" required><br>
+
+        <label for="nacionalidad">Nacionalidad:</label>
+        <input type="text" id="nacionalidad" required><br>
+
+        <button type="submit">Crear</button>
+        <button onclick="mostrarDatos()">Mostrar Datos</button>
+    </form>
+
+    <h2>Jugadores</h2>
+    <table id="jugadores-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Posición</th>
+                <th>Equipo</th>
+                <th>Nacionalidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // Obtener referencia a la tabla y el formulario
+        const tableBody = document.querySelector('#jugadores-table tbody');
+        const createForm = document.querySelector('#create-form');
+
+        // Función para redirigir a la página de mostrar datos
+        function mostrarDatos() {
+            window.location.href = 'mostrar-datos.html';
+        }
+
+        // Función para cargar los jugadores desde la API
+        function cargarJugadores() {
+            fetch('api.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener los jugadores.');
+                    }
+                    return response.json(); // Convertir la respuesta a JSON
+                })
+                .then(jugadores => {
+                    // Limpiar la tabla
+                    tableBody.innerHTML = '';
+
+                    // Recorrer los jugadores y agregar filas a la tabla
+                    jugadores.forEach(jugador => {
+                        const row = `
+                            <tr>
+                                <td>${jugador.id}</td>
+                                <td>${jugador.nombre}</td>
+                                <td>${jugador.edad}</td>
+                                <td>${jugador.posicion}</td>
+                                <td>${jugador.equipo}</td>
+                                <td>${jugador.nacionalidad}</td>
+                                <td>
+                                    <button onclick="editarJugador(${jugador.id})">Editar</button>
+                                    <button onclick="eliminarJugador(${jugador.id})">Eliminar</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener los jugadores:', error);
+                });
+        }
+
+        // Función para crear un jugador
+        function crearJugador() {
+            const nombre = document.querySelector('#nombre').value;
+            const edad = document.querySelector('#edad').value;
+            const posicion = document.querySelector('#posicion').value;
+            const equipo = document.querySelector('#equipo').value;
+            const nacionalidad = document.querySelector('#nacionalidad').value;
+
+            // Desactivar el botón de Crear
+            const submitButton = document.querySelector('#create-form button');
+            submitButton.disabled = true;
+
+            fetch('api.php', {
+                method: 'POST',
+                body: JSON.stringify({ nombre, edad, posicion, equipo, nacionalidad }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    createForm.reset();
+                    cargarJugadores();
+
+                    // Reactivar el botón de Crear después de un breve retraso
+                    setTimeout(() => {
+                        submitButton.disabled = false;
+                    }, 500);
+                });
+        }
+
+        // Función para eliminar un jugador
+        function eliminarJugador(id) {
+            fetch(`api.php?id=${id}`, {
+                method: 'DELETE'
+            })
+                .then(() => cargarJugadores());
+        }
+
+        // Función para cargar los datos de un jugador en el formulario de edición
+        function editarJugador(id) {
+            fetch(`api.php?id=${id}`)
+                .then(response => response.json())
+                .then(jugador => {
+                    document.querySelector('#nombre').value = jugador.nombre;
+                    document.querySelector('#edad').value = jugador.edad;
+                    document.querySelector('#posicion').value = jugador.posicion;
+                    document.querySelector('#equipo').value = jugador.equipo;
+                    document.querySelector('#nacionalidad').value = jugador.nacionalidad;
+
+                    // Actualizar el botón del formulario para que llame a la función de actualización
+                    const submitButton = document.querySelector('#create-form button');
+                    submitButton.innerText = 'Actualizar';
+                    submitButton.onclick = () => actualizarJugador(id);
+                });
+        }
+
+        // Función para actualizar un jugador
+        function actualizarJugador(id) {
+            const nombre = document.querySelector('#nombre').value;
+            const edad = document.querySelector('#edad').value;
+            const posicion = document.querySelector('#posicion').value;
+            const equipo = document.querySelector('#equipo').value;
+            const nacionalidad = document.querySelector('#nacionalidad').value;
+
+            // Desactivar el botón de Actualizar
+            const submitButton = document.querySelector('#create-form button');
+            submitButton.disabled = true;
+
+            fetch(`api.php?id=${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ nombre, edad, posicion, equipo, nacionalidad }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    createForm.reset();
+
+                    // Restaurar el botón del formulario para que llame a la función de creación
+                    submitButton.innerText = 'Crear';
+                    submitButton.onclick = crearJugador;
+
+                    cargarJugadores();
+
+                    // Reactivar el botón de Actualizar después de un breve retraso
+                    setTimeout(() => {
+                        submitButton.disabled = false;
+                    }, 500);
+                });
+        }
+
+        // Cargar jugadores al cargar la página
+        cargarJugadores();
+
+        // Agregar evento de envío del formulario
+        createForm.addEventListener('submit', event => {
+            event.preventDefault();
+            crearJugador();
+        });
+    </script>
+</body>
+</html>

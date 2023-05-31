@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>Mostrar Datos</title>
+</head>
+<body>
+    <h1>Jugadores</h1>
+
+    <div id="jugadores-container"></div>
+
+    <button onclick="volver()">Volver</button>
+
+    <script>
+        // Función para cargar y mostrar los datos de los jugadores
+        function cargarJugadores() {
+            fetch('api.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener los jugadores.');
+                    }
+                    return response.json(); // Convertir la respuesta a JSON
+                })
+                .then(jugadores => {
+                    const container = document.querySelector('#jugadores-container');
+
+                    // Limpiar el contenedor
+                    container.innerHTML = '';
+
+                    // Recorrer los jugadores y mostrar los datos
+                    jugadores.forEach(jugador => {
+                        const jugadorDiv = document.createElement('div');
+                        jugadorDiv.classList.add('jugador');
+
+                        const nombre = document.createElement('h2');
+                        nombre.textContent = jugador.nombre;
+                        jugadorDiv.appendChild(nombre);
+
+                        const edad = document.createElement('p');
+                        edad.textContent = 'Edad: ' + jugador.edad;
+                        jugadorDiv.appendChild(edad);
+
+                        const posicion = document.createElement('p');
+                        posicion.textContent = 'Posición: ' + jugador.posicion;
+                        jugadorDiv.appendChild(posicion);
+
+                        const equipo = document.createElement('p');
+                        equipo.textContent = 'Equipo: ' + jugador.equipo;
+                        jugadorDiv.appendChild(equipo);
+
+                        const nacionalidad = document.createElement('p');
+                        nacionalidad.textContent = 'Nacionalidad: ' + jugador.nacionalidad;
+                        jugadorDiv.appendChild(nacionalidad);
+
+                        container.appendChild(jugadorDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener los jugadores:', error);
+                });
+        }
+
+        // Función para volver a la página principal
+        function volver() {
+            window.location.href = 'index.html';
+        }
+
+        // Cargar y mostrar los jugadores al cargar la página
+        cargarJugadores();
+
+    </script>
+</body>
+</html>
