@@ -1,0 +1,50 @@
+*Ip del servidor:*
+34.133.76.144
+
+*Phpmyadmin credenciales:*
+user: phpmyadmin 
+pass: admin
+
+*Rutas de los frontends*
+http://34.133.76.144/practicaiotadrian/index.html
+http://34.133.76.144/practicaiotadrian/mostrar-datos.html
+http://34.133.76.144/practicaiotadrian/mosquitto.html
+http://34.133.76.144/practicaiotadrian/topicoled/topicoled.html 
+
+*Rutas de las API con las payloads en json:*
+Obtener todos los jugadores (GET):
+
+    Ruta: api.php
+    Payload: No se requiere payload.
+
+Obtener un jugador por ID (GET):
+
+    Ruta: api.php?id=[id]
+    Reemplaza [id] con el ID del jugador que deseas obtener.
+    Payload: No se requiere payload.
+
+Crear un nuevo jugador (POST):
+
+    Ruta: api.php
+    Payload:3
+
+Actualizar un jugador existente por ID (PUT):
+
+    Ruta: api.php?id=[id]
+    Reemplaza [id] con el ID del jugador que deseas actualizar.
+    Payload:
+
+Eliminar un jugador por ID (DELETE):
+
+    Ruta: api.php?id=[id]
+    Reemplaza [id] con el ID del jugador que deseas eliminar.
+    Payload: No se requiere payload.
+
+*Mosquitto credenciales:* 
+user: adrianjustiniano 
+pass: adrian
+
+
+
+
+
