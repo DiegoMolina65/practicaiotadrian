@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+    <title>Control del LED</title>
+</head>
+<body>
+    <h1>Control del LED</h1>
+
+    <label for="led-state">Estado del LED:</label>
+    <select id="led-state">
+        <option value="ON">Encendido</option>
+        <option value="OFF">Apagado</option>
+    </select>
+
+    <button onclick="publicarEstado()">Publicar</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
+    <script>
+        // Configuración de conexión MQTT
+        const brokerHost = "34.133.76.144";
+        const brokerPort = 9001; // Puerto predeterminado para MQTT sin encriptación
+        const username = "adrianjustiniano";
+        const password = "adrian";
+        const ledTopic = "led";
+
+        // Crear instancia del cliente MQTT
+        const mqttClient = new Paho.MQTT.Client(brokerHost, brokerPort, "mqtt-client-" + Math.random().toString(16).substr(2, 8));
+
+        // Configurar las credenciales de autenticación
+        mqttClient.username = username;
+        mqttClient.password = password;
+
+        // Función de conexión exitosa
+        const onConnect = () => {
+            console.log("Conexión exitosa a Mosquitto");
+        };
+
+        // Función de pérdida de conexión
+        const onConnectionLost = response => {
+            console.log("Conexión perdida a Mosquitto: " + response.errorMessage);
+        };
+
+        // Configurar los controladores de eventos
+        mqttClient.onConnectionLost = onConnectionLost;
+
+        // Conectar al broker MQTT
+        mqttClient.connect({
+            onSuccess: onConnect,
+            useSSL: false // Cambiar a true si el servidor MQTT utiliza SSL/TLS
+        });
+
+        // Función para publicar el estado del LED
+        const publicarEstado = () => {
+            const ledState = document.getElementById("led-state").value;
+
+            // Crear mensaje MQTT
+            const message = new Paho.MQTT.Message(ledState);
+            message.destinationName = ledTopic;
+
+            // Publicar mensaje
+            mqttClient.send(message);
+            console.log("Mensaje publicado: " + ledState);
+        };
+    </script>
+</body>
+</html>
